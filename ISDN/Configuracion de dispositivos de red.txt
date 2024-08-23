@@ -1,0 +1,129 @@
+### **Configuración de Switches**
+
+1. **Entrar en modo de configuración global**:
+   ```bash
+   enable
+   configure terminal
+   ```
+
+2. **Configurar el nombre del switch**:
+   ```bash
+   hostname NOMBRE_DEL_SWITCH
+   ```
+
+3. **Configurar una interfaz VLAN**:
+   ```bash
+   interface vlan 1
+   ip address 192.168.1.1 255.255.255.0
+   no shutdown
+   ```
+
+4. **Asignar una interfaz a una VLAN**:
+   ```bash
+   interface fastethernet 0/1
+   switchport mode access
+   switchport access vlan 10
+   ```
+
+5. **Configurar una interfaz de trunk**:
+   ```bash
+   interface fastethernet 0/24
+   switchport mode trunk
+   switchport trunk allowed vlan 10,20,30
+   ```
+
+6. **Configurar un puerto en modo Trunk y asignar VLAN nativa**:
+   ```bash
+   interface fastethernet 0/24
+   switchport trunk encapsulation dot1q
+   switchport trunk native vlan 99
+   switchport mode trunk
+   ```
+
+7. **Habilitar/Deshabilitar una interfaz**:
+   ```bash
+   interface fastethernet 0/1
+   shutdown       # Deshabilitar
+   no shutdown    # Habilitar
+   ```
+
+8. **Guardar la configuración**:
+   ```bash
+   write memory
+   ```
+
+### **Configuración de Routers**
+
+1. **Entrar en modo de configuración global**:
+   ```bash
+   enable
+   configure terminal
+   ```
+
+2. **Configurar el nombre del router**:
+   ```bash
+   hostname NOMBRE_DEL_ROUTER
+   ```
+
+3. **Configurar una interfaz de red**:
+   ```bash
+   interface gigabitethernet 0/0
+   ip address 192.168.1.1 255.255.255.0
+   no shutdown
+   ```
+
+4. **Configurar rutas estáticas**:
+   ```bash
+   ip route 192.168.2.0 255.255.255.0 192.168.1.2
+   ```
+
+5. **Habilitar NAT (Network Address Translation)**:
+   ```bash
+   access-list 1 permit 192.168.1.0 0.0.0.255
+   ip nat inside source list 1 interface gigabitethernet 0/1 overload
+   interface gigabitethernet 0/0
+   ip nat inside
+   interface gigabitethernet 0/1
+   ip nat outside
+   ```
+
+6. **Configurar DHCP en el router**:
+   ```bash
+   ip dhcp pool NOMBRE_DEL_POOL
+   network 192.168.1.0 255.255.255.0
+   default-router 192.168.1.1
+   dns-server 8.8.8.8
+   ```
+
+7. **Configurar SSH para acceso seguro**:
+   ```bash
+   ip domain-name ejemplo.com
+   crypto key generate rsa
+   username admin privilege 15 secret CONTRASEÑA
+   line vty 0 4
+   login local
+   transport input ssh
+   ```
+
+8. **Guardar la configuración**:
+   ```bash
+   write memory
+   ```
+
+### **Otros Comandos Útiles**
+
+- **Ver la configuración actual**:
+  ```bash
+  show running-config
+  ```
+
+- **Ver la configuración guardada**:
+  ```bash
+  show startup-config
+  ```
+
+- **Ver el estado de las interfaces**:
+  ```bash
+  show ip interface brief
+  ```
+

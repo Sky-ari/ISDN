@@ -1,0 +1,94 @@
+OpenDaylight (ODL)
+Instalación y Configuración Básica
+
+Iniciar OpenDaylight:
+
+bash
+Copiar código
+./bin/karaf
+Instalar un módulo (ejemplo: L2switch):
+
+bash
+Copiar código
+feature:install odl-l2switch-switch
+Verificar los módulos instalados:
+
+bash
+Copiar código
+feature:list
+Agregar un nodo OpenFlow (ejemplo, usando la API REST):
+
+bash
+Copiar código
+curl -X POST -H "Content-Type: application/json" -d '{
+  "node": {
+    "id": "openflow:1",
+    "node-connector": [
+      {
+        "id": "openflow:1:1",
+        "port-number": "1"
+      }
+    ]
+  }
+}' http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/openflow:1
+Verificar los nodos conectados (usando la API REST):
+
+bash
+Copiar código
+curl -X GET http://localhost:8181/restconf/operational/network-topology:network-topology
+2. ONOS
+Instalación y Configuración Básica
+
+Iniciar ONOS:
+
+bash
+Copiar código
+onos-service start
+Agregar un dispositivo (ejemplo, usando la CLI de ONOS):
+
+bash
+Copiar código
+devices
+Verificar el estado del controlador:
+
+bash
+Copiar código
+onos> devices
+Instalar una aplicación (ejemplo: l2):
+
+bash
+Copiar código
+onos> apps install org.onosproject.l2
+Configurar el controlador para un switch (ejemplo, usando la CLI):
+
+bash
+Copiar código
+onos> devices add <switch-id> <ip-address>
+3. Ryu
+Instalación y Configuración Básica
+
+Iniciar el controlador Ryu con un archivo de aplicación:
+
+bash
+Copiar código
+ryu-manager <your-application>.py
+Ejemplo de un archivo de aplicación (app.py):
+
+python
+Copiar código
+from ryu.base import app_manager
+from ryu.controller import controller
+from ryu.controller.handler import set_ev_cls
+from ryu.controller.handler import CONFIG_DISPATCHER
+from ryu.controller.event import EventBase
+from ryu.lib import hub
+
+class MyApp(app_manager.RyuApp):
+    @set_ev_cls(EventBase, CONFIG_DISPATCHER)
+    def _handler(self, ev):
+        pass  # Implement your logic here
+Verificar los switches conectados (usando la API REST):
+
+bash
+Copiar código
+curl -X GET http://localhost:8080/stats/switches
